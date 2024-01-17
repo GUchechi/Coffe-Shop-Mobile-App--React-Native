@@ -58,25 +58,26 @@ const HomeScreen = () => {
 
 
   // Animation
-const animatedTitleX = new Animated.Value(0);
+  const animatedTitleX = new Animated.Value(0);
 
-const animateTitle = () => {
-  Animated.timing(animatedTitleX, {
-    toValue: 100, // Adjust this value based on how much you want the text to move
-    duration: 5000, // Adjust the duration of the animation
-    easing: Easing.linear, // You can change the easing function
-    useNativeDriver: false, // This is required for certain animations
-  }).start(() => {
-    // Reset the animated value after the animation completes
-    animatedTitleX.setValue(0);
-    // Repeat the animation
+  const animateTitle = () => {
+    Animated.timing(animatedTitleX, {
+      toValue: 100, // Adjust this value based on how much you want the text to move
+      duration: 5000, // Adjust the duration of the animation
+      easing: Easing.linear, // You can change the easing function
+      useNativeDriver: false, // This is required for certain animations
+    }).start(() => {
+      // Reset the animated value after the animation completes
+      animatedTitleX.setValue(0);
+      // Repeat the animation
+      animateTitle();
+    });
+  };
+
+  useEffect(() => {
     animateTitle();
-  });
-};
-
-useEffect(() => {
-  animateTitle();
-}, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
 
 
