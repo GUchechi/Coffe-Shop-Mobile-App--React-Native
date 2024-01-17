@@ -27,7 +27,7 @@ const BeansData = [
     imagelink_square: require('../assets/coffee_assets/arabica_coffee_beans/arabica_coffee_beans_square.png'),
     imagelink_portrait: require('../assets/coffee_assets/arabica_coffee_beans/arabica_coffee_beans_portrait.png'),
     ingredients: 'Africa',
-    special_ingredient: 'From Africa',
+    special_ingredient: 'From America',
     prices: [
       {size: '250gm', price: '5.50', currency: '$'},
       {size: '500gm', price: '10.50', currency: '$'},
@@ -46,7 +46,7 @@ const BeansData = [
     roasted: 'Medium Roasted',
     imagelink_square: require('../assets/coffee_assets/liberica_coffee_beans/liberica_coffee_beans_square.png'),
     imagelink_portrait: require('../assets/coffee_assets/liberica_coffee_beans/liberica_coffee_beans_portrait.png'),
-    ingredients: 'Malaysia',
+    ingredients: 'Italy',
     special_ingredient: 'From Malaysia',
     prices: [
       {size: '250gm', price: '5.50', currency: '$'},

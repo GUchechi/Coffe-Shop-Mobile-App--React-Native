@@ -13,7 +13,7 @@ interface CoffeeCardProps {
     name: string,
     description: string,
     roasted: string,
-    imagelink_square: ImageProps,
+    imagelink_square: any,
     ingredients: string,
     special_ingredient: string,
     prices: any,
