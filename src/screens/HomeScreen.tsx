@@ -1,8 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { View, Text, StyleSheet, StatusBar, ScrollView, TouchableOpacity, TextInput, FlatList } from 'react-native';
 import { useStore } from '../store/store';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-import { Animated, Easing } from 'react-native';
 import { BORDERRADIUS, COLORS, FONTFAMILY, FONTSIZE, SPACING } from '../theme/theme';
 import HeadBar from '../components/HeadBar';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -33,8 +32,6 @@ const getCofeeList = (category: string, data: any) => {
   }
 };
 
-
-
 const HomeScreen = () => {
   const CoffeeList = useStore((state: any) => state.CoffeeList);
   const BeanList = useStore((state: any) => state.BeanList);
@@ -54,31 +51,7 @@ const HomeScreen = () => {
   const tabBarHeight = useBottomTabBarHeight();
 
   // ScrollView Problem
-  const listRef: any = useRef<FlatList>();
-
-
-  // Animation
-  const animatedTitleX = new Animated.Value(0);
-
-  const animateTitle = () => {
-    Animated.timing(animatedTitleX, {
-      toValue: 100, // Adjust this value based on how much you want the text to move
-      duration: 5000, // Adjust the duration of the animation
-      easing: Easing.linear, // You can change the easing function
-      useNativeDriver: false, // This is required for certain animations
-    }).start(() => {
-      // Reset the animated value after the animation completes
-      animatedTitleX.setValue(0);
-      // Repeat the animation
-      animateTitle();
-    });
-  };
-
-  useEffect(() => {
-    animateTitle();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
+  const listRef: any = useRef<FlatList>()
 
 
   return (
@@ -92,7 +65,7 @@ const HomeScreen = () => {
 
 
         {/* Screen Title */}
-        <Animated.Text style={[styles.screenTitle, { transform: [{ translateX: animatedTitleX }] }]}>Find the best coffee for you</Animated.Text>
+        <Text style={styles.screenTitle}>Find the best coffee for you</Text>
 
         {/* Search Input */}
         <View style={styles.inputContainerComponent}>
