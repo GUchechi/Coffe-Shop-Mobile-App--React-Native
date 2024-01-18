@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, ImageBackground, ImageProps, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { BORDERRADIUS, COLORS, FONTFAMILY, FONTSIZE, SPACING } from '../theme/theme';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -13,7 +13,7 @@ interface CoffeeCardProps {
     name: string,
     description: string,
     roasted: string,
-    imagelink_square: any,
+    imagelink_square: ImageProps,
     ingredients: string,
     special_ingredient: string,
     prices: any,

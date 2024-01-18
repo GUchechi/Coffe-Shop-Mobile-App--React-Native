@@ -155,7 +155,13 @@ const HomeScreen = ({ navigation }: any) => {
           contentContainerStyle={styles.flatListContainer}
           keyExtractor={item => item.id}
           renderItem={({ item }) => {
-            return <TouchableOpacity onPress={() => { navigation.push('Details'); }}>
+            return <TouchableOpacity onPress={() => {
+              navigation.push('Details', {
+                index: item.index,
+                id: item.id,
+                type: item.type,
+              });
+            }}>
               <CoffeeCard
                 id={item.id}
                 name={item.name}
@@ -185,7 +191,13 @@ const HomeScreen = ({ navigation }: any) => {
           contentContainerStyle={[styles.flatListContainer, { marginBottom: tabBarHeight }]}
           keyExtractor={item => item.id}
           renderItem={({ item }) => {
-            return <TouchableOpacity onPress={() => { navigation.push('Details'); }}>
+            return <TouchableOpacity onPress={() => {
+              navigation.push('Details', {
+                index: item.index,
+                id: item.id,
+                type: item.type,
+              });
+            }}>
               <CoffeeCard
                 id={item.id}
                 name={item.name}
