@@ -8,33 +8,30 @@ import BGIcon from './BGIcon';
 const CARD_WIDTH = Dimensions.get('window').width * 0.32;
 
 interface CoffeeCardProps {
-    id: string,
-    index: number,
-    name: string,
-    description: string,
-    roasted: string,
-    imagelink_square: ImageProps,
-    ingredients: string,
-    special_ingredient: string,
-    prices: any,
-    average_rating: number,
-    type: string,
+    id: string;
+    index: number;
+    type: string;
+    roasted: string;
+    imagelink_square: ImageProps;
+    name: string;
+    special_ingredient: string;
+    average_rating: number;
+    price: any;
     buttonPressHandler: any;
 }
 
 const CoffeeCard: React.FC<CoffeeCardProps> = (
     {
         id,
-        name,
-        description,
+        index,
+        type,
         roasted,
         imagelink_square,
-        ingredients,
+        name,
         special_ingredient,
-        prices,
         average_rating,
-        type,
-        index,
+        price,
+        buttonPressHandler,
     }
 ) => {
     return (
@@ -57,15 +54,27 @@ const CoffeeCard: React.FC<CoffeeCardProps> = (
 
                 {/* Price */}
                 <Text style={styles.cardPriceCurrency}>
-                    $ <Text style={styles.cardPrice}>{prices.price}</Text>
+                    $ <Text style={styles.cardPrice}>{price.price}</Text>
                 </Text>
 
                 {/* Button */}
-                <TouchableOpacity onPress={() => {}}>
+                <TouchableOpacity onPress={() => {
+                    buttonPressHandler({
+                        id,
+                        index,
+                        type,
+                        roasted,
+                        imagelink_square,
+                        name,
+                        special_ingredient,
+                        prices: [{ ...price, quantity: 1 }],
+
+                    });
+                }}>
                     <BGIcon color={COLORS.primaryWhiteHex} BGColor={COLORS.primaryOrangeHex} size={FONTSIZE.size_10} />
                 </TouchableOpacity>
             </View>
-        </LinearGradient>
+        </LinearGradient >
     );
 };
 

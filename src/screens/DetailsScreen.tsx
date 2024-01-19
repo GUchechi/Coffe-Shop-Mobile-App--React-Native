@@ -1,4 +1,4 @@
-import { View, StatusBar, ScrollView, StyleSheet, Text, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
+import { View, StatusBar, ScrollView, StyleSheet, Text, TouchableWithoutFeedback, TouchableOpacity, ToastAndroid } from 'react-native';
 import React, { useState } from 'react';
 import { useStore } from '../store/store';
 import { BORDERRADIUS, COLORS, FONTFAMILY, FONTSIZE, SPACING } from '../theme/theme';
@@ -56,6 +56,11 @@ const DetailsScreen = ({ navigation, route }: any) => {
       prices: [{ ...price, quantity: 1 }],
     });
     calculateCartPrice();
+    ToastAndroid.showWithGravity(
+      `${name} is Added to Cart`,
+      ToastAndroid.SHORT,
+      ToastAndroid.CENTER,
+    );
     navigation.navigate('Cart');
   };
 

@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { View, Text, StyleSheet, StatusBar, ScrollView, TouchableOpacity, TextInput, FlatList, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, StatusBar, ScrollView, TouchableOpacity, TextInput, FlatList, Dimensions, ToastAndroid } from 'react-native';
 import { useStore } from '../store/store';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { BORDERRADIUS, COLORS, FONTFAMILY, FONTSIZE, SPACING } from '../theme/theme';
@@ -33,6 +33,8 @@ const getCofeeList = (category: string, data: any) => {
 };
 
 
+
+
 const HomeScreen = ({ navigation }: any) => {
   const CoffeeList = useStore((state: any) => state.CoffeeList);
   const BeanList = useStore((state: any) => state.BeanList);
@@ -48,6 +50,9 @@ const HomeScreen = ({ navigation }: any) => {
   const [sortedCoffee, setSortedCoffee] = useState(
     getCofeeList(categoryIndex.category, CoffeeList),
   );
+
+  const addToCart = useStore((state: any) => state.addToCart);
+  const calculateCartPrice = useStore((state: any) => state.calculateCartPrice);
 
   const tabBarHeight = useBottomTabBarHeight();
 
@@ -76,6 +81,36 @@ const HomeScreen = ({ navigation }: any) => {
     setSortedCoffee([...CoffeeList]);
     setSearchText('');
   };
+
+  //Coffe Card Add to Cart
+  const CoffeCardAddToCart = ({
+    id,
+    index,
+    name,
+    roasted,
+    imagelink_square,
+    special_ingredient,
+    type,
+    prices,
+  }: any) => {
+    addToCart({
+      id,
+      index,
+      name,
+      roasted,
+      imagelink_square,
+      special_ingredient,
+      type,
+      prices,
+    });
+    calculateCartPrice();
+    ToastAndroid.showWithGravity(
+      `${name} is Added to Cart`,
+      ToastAndroid.SHORT,
+      ToastAndroid.CENTER,
+    );
+  };
+
 
 
   return (
@@ -164,17 +199,16 @@ const HomeScreen = ({ navigation }: any) => {
             }}>
               <CoffeeCard
                 id={item.id}
-                name={item.name}
-                description={item.description}
+                index={item.index}
+                type={item.type}
                 roasted={item.roasted}
                 imagelink_square={item.imagelink_square}
-                ingredients={item.ingredients}
+                name={item.name}
                 special_ingredient={item.special_ingredient}
-                prices={item.prices[2]}
                 average_rating={item.average_rating}
-                type={item.type}
-                index={item.index}
-                buttonPressHandler={() => { }}
+                price={item.prices[2]}
+                buttonPressHandler={CoffeCardAddToCart}
+
               />
             </TouchableOpacity>;
           }}
@@ -200,17 +234,15 @@ const HomeScreen = ({ navigation }: any) => {
             }}>
               <CoffeeCard
                 id={item.id}
-                name={item.name}
-                description={item.description}
+                index={item.index}
+                type={item.type}
                 roasted={item.roasted}
                 imagelink_square={item.imagelink_square}
-                ingredients={item.ingredients}
+                name={item.name}
                 special_ingredient={item.special_ingredient}
-                prices={item.prices[2]}
                 average_rating={item.average_rating}
-                type={item.type}
-                index={item.index}
-                buttonPressHandler={() => { }}
+                price={item.prices[2]}
+                buttonPressHandler={CoffeCardAddToCart}
               />
             </TouchableOpacity>;
           }}
