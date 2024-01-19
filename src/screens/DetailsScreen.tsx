@@ -14,6 +14,9 @@ const DetailsScreen = ({ navigation, route }: any) => {
   const [price, setPrice] = useState(ItemOfIndex.prices[0]);
   const [fullDesc, setFullDesc] = useState(false);
 
+  const addToCart = useStore((state: any) => state.addToCart);
+  const calculateCartPrice = useStore((state: any) => state.calculateCartPrice);
+
   const addToFavoriteList = useStore((state: any) => state.addToFavoriteList);
 
   const deleteFromFavoriteList = useStore(
@@ -29,6 +32,31 @@ const DetailsScreen = ({ navigation, route }: any) => {
   // BackHandler
   const backHandler = () => {
     navigation.pop();
+  };
+
+  // Add to Cart
+  const addToCarthandler = ({
+    id,
+    index,
+    name,
+    roasted,
+    imagelink_square,
+    special_ingredient,
+    type,
+    price,
+  }: any) => {
+    addToCart({
+      id,
+      index,
+      name,
+      roasted,
+      imagelink_square,
+      special_ingredient,
+      type,
+      prices: [{ ...price, quantity: 1 }],
+    });
+    calculateCartPrice();
+    navigation.navigate('Cart');
   };
 
   return (
@@ -107,7 +135,21 @@ const DetailsScreen = ({ navigation, route }: any) => {
         </View>
         <PaymentFooter
           price={price}
-          buttonTitle="Add to Cart" />
+          buttonTitle="Add to Cart"
+          buttonPressHandler={() => {
+            addToCarthandler({
+              id: ItemOfIndex.id,
+              index: ItemOfIndex.index,
+              name: ItemOfIndex.name,
+              roasted: ItemOfIndex.roasted,
+              imagelink_square: ItemOfIndex.imagelink_square,
+              special_ingredient: ItemOfIndex.special_ingredient,
+              type: ItemOfIndex.type,
+              price: price,
+            });
+
+          }}
+        />
       </ScrollView>
     </View>
   );
@@ -120,6 +162,7 @@ const styles = StyleSheet.create({
   },
   scrollViewFlex: {
     flexGrow: 1,
+    justifyContent: 'space-between',
   },
   footerInfoArea: {
     padding: SPACING.space_20,
