@@ -1,13 +1,15 @@
 import React from 'react';
-import { View, Text, StatusBar, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, StatusBar, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useStore } from '../store/store';
-import { COLORS } from '../theme/theme';
+import { COLORS, SPACING } from '../theme/theme';
 import HeadBar from '../components/HeadBar';
 import EmptyListAnimation from '../components/EmptyListAnimation';
+import PaymentFooter from '../components/PaymentFooter';
+import CartItem from '../components/CartItem';
 
 
-const CartScreen = () => {
+const CartScreen = ({ navigation }: any) => {
   const CartList = useStore((state: any) => state.CartList);
   const CartPrice = useStore((state: any) => state.CartPrice);
   const incrementCartItemQuantity = useStore(
@@ -19,7 +21,9 @@ const CartScreen = () => {
   const calculateCartPrice = useStore((state: any) => state.calculateCartPrice);
   const tabBarHeight = useBottomTabBarHeight();
 
-  console.log(CartList.length);
+  const buttonHandler = () => {
+    navigation.navigate('Payment');
+  };
 
   return (
     <View style={styles.screenContainer}>
@@ -32,8 +36,39 @@ const CartScreen = () => {
         <View style={[styles.scrollViewInnerView, { marginBottom: tabBarHeight }]}>
           <View style={styles.itemContainer}>
             <HeadBar title="Cart" />
-            {CartList.length === 0 ? <EmptyListAnimation title={'Cart is Empty!!!'} /> : <></>}
+
+            {CartList.length === 0 ? (
+              <EmptyListAnimation title={'Cart is Empty!!!'} />
+            ) : (
+              <View style={styles.listItemContainer}>
+                {CartList.map((data: any) => (
+                  <TouchableOpacity onPress={() => { }} key={data.id}>
+                    <CartItem
+                      id={data.id}
+                      name={data.name}
+                      imagelink_square={data.imagelink_square}
+                      special_ingredient={data.special_ingredient}
+                      roasted={data.roasted}
+                      prices={data.prices}
+                      type={data.type}
+                      incrementCartItemQuantityHandler={() => { }}
+                      decrementCartItemQuantityHandler={() => { }}
+                    />
+                  </TouchableOpacity>
+                ))}
+              </View>
+            )}
           </View>
+
+          {CartList.length !== 0 && (
+            <PaymentFooter
+              buttonPressHandler={() => {
+                buttonHandler();
+              }}
+              price={{ price: CartPrice, currency: '$' }}
+              buttonTitle="Pay"
+            />
+          )}
         </View>
       </ScrollView>
     </View>
@@ -54,6 +89,10 @@ const styles = StyleSheet.create({
   },
   itemContainer: {
     flex: 1,
+  },
+  listItemContainer: {
+    paddingHorizontal: SPACING.space_20,
+    gap: SPACING.space_20,
   },
 });
 
