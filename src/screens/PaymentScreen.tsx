@@ -15,12 +15,14 @@ import {
   SPACING,
 } from '../theme/theme';
 import Entypo from 'react-native-vector-icons/Entypo';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import GradientBGIcon from '../components/GradientBGIcon';
 import PaymentMethod from '../components/PaymentMethod';
 import PaymentFooter from '../components/PaymentFooter';
 import LinearGradient from 'react-native-linear-gradient';
-import CustomIcon from '../components/CustomIcon';
 import { useStore } from '../store/store';
+import PopUpAnimation from '../components/PopUpAnimation';
 
 const PaymentList = [
   {
@@ -47,9 +49,39 @@ const PaymentList = [
 
 const PaymentScreen = ({ navigation, route }: any) => {
   const [paymentMode, setPaymentMode] = useState('Credit Card');
+
+  const [showAnimation, setShowAnimation] = useState(false);
+
+  const calculateCartPrice = useStore((state: any) => state.calculateCartPrice);
+  const addToOrderHistoryListFromCart = useStore(
+    (state: any) => state.addToOrderHistoryListFromCart,
+  );
+
+  // Payment Successful
+  const buttonPressHandler = () => {
+    setShowAnimation(true);
+    addToOrderHistoryListFromCart();
+    calculateCartPrice();
+    setTimeout(() => {
+      setShowAnimation(false);
+      navigation.navigate('History');
+    }, 2000);
+  };
+
+
   return (
     <View style={styles.ScreenContainer}>
       <StatusBar backgroundColor={COLORS.primaryBlackHex} />
+
+      {showAnimation ? (
+        <PopUpAnimation
+          style={styles.LottieAnimation}
+          source={require('../lottie/successful.json')}
+        />
+      ) : (
+        <></>
+      )}
+
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.ScrollViewFlex}
@@ -72,6 +104,65 @@ const PaymentScreen = ({ navigation, route }: any) => {
         </View>
 
         <View style={styles.PaymentOptionsContainer}>
+          <TouchableOpacity
+            onPress={() => {
+              setPaymentMode('Credit Card');
+            }}>
+            <View
+              style={[
+                styles.CreditCardContainer,
+                {
+                  borderColor:
+                    paymentMode === 'Credit Card'
+                      ? COLORS.primaryOrangeHex
+                      : COLORS.primaryGreyHex,
+                },
+              ]}>
+              <Text style={styles.CreditCardTitle}>Credit Card</Text>
+              <View style={styles.CreditCardBG}>
+                <LinearGradient
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={styles.LinearGradientStyle}
+                  colors={[COLORS.primaryGreyHex, COLORS.primaryBlackHex]}>
+                  <View style={styles.CreditCardRow}>
+                    <MaterialCommunityIcons
+                      name="integrated-circuit-chip"
+                      size={FONTSIZE.size_20 * 2}
+                      color={COLORS.primaryOrangeHex}
+                    />
+                    <FontAwesome
+                      name="cc-visa"
+                      size={FONTSIZE.size_30 + 12}
+                      color={COLORS.primaryWhiteHex}
+                    />
+                  </View>
+                  <View style={styles.CreditCardNumberContainer}>
+                    <Text style={styles.CreditCardNumber}>3879</Text>
+                    <Text style={styles.CreditCardNumber}>8923</Text>
+                    <Text style={styles.CreditCardNumber}>6745</Text>
+                    <Text style={styles.CreditCardNumber}>4638</Text>
+                  </View>
+                  <View style={styles.CreditCardRow}>
+                    <View style={styles.CreditCardNameContainer}>
+                      <Text style={styles.CreditCardNameSubitle}>
+                        Card Holder Name
+                      </Text>
+                      <Text style={styles.CreditCardNameTitle}>
+                        Robert Evans
+                      </Text>
+                    </View>
+                    <View style={styles.CreditCardDateContainer}>
+                      <Text style={styles.CreditCardNameSubitle}>
+                        Expiry Date
+                      </Text>
+                      <Text style={styles.CreditCardNameTitle}>02/30</Text>
+                    </View>
+                  </View>
+                </LinearGradient>
+              </View>
+            </View>
+          </TouchableOpacity>
 
           {PaymentList.map((data: any) => (
             <TouchableOpacity key={data.id}>
@@ -85,6 +176,13 @@ const PaymentScreen = ({ navigation, route }: any) => {
           ))}
         </View>
       </ScrollView>
+
+      <PaymentFooter
+        buttonTitle={`Pay with ${paymentMode}`}
+        price={{ price: route.params.amount, currency: '$' }}
+        buttonPressHandler={buttonPressHandler}
+      />
+
     </View>
   );
 };

@@ -22,7 +22,7 @@ const CartScreen = ({ navigation }: any) => {
   const tabBarHeight = useBottomTabBarHeight();
 
   const buttonHandler = () => {
-    navigation.navigate('Payment');
+    navigation.navigate('Payment', { amount: CartPrice });
   };
 
   // Increment cart price
